@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMW KI-Team-Challenge Workshop</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React & ReactDOM -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Babel Standalone for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <!-- Lucide React Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    
+    // Lucide Icons
+    const ChevronLeft = () => React.createElement('svg', { 
+      xmlns: "http://www.w3.org/2000/svg", 
+      width: 24, 
+      height: 24, 
+      viewBox: "0 0 24 24", 
+      fill: "none", 
+      stroke: "currentColor", 
+      strokeWidth: 2, 
+      strokeLinecap: "round", 
+      strokeLinejoin: "round" 
+    }, React.createElement('path', { d: "m15 18-6-6 6-6" }));
+    
+    const ChevronRight = () => React.createElement('svg', { 
+      xmlns: "http://www.w3.org/2000/svg", 
+      width: 24, 
+      height: 24, 
+      viewBox: "0 0 24 24", 
+      fill: "none", 
+      stroke: "currentColor", 
+      strokeWidth: 2, 
+      strokeLinecap: "round", 
+      strokeLinejoin: "round" 
+    }, React.createElement('path', { d: "m9 18 6-6-6-6" }));
+    
+    const Cpu = ({ className, size = 24 }) => React.createElement('svg', { 
+      className,
+      width: size, 
+      height: size, 
+      viewBox: "0 0 24 24", 
+      fill: "none", 
+      stroke: "currentColor", 
+      strokeWidth: 2, 
+      strokeLinecap: "round", 
+      strokeLinejoin: "round" 
+    }, [
+      React.createElement('rect', { key: 1, width: 16, height: 16, x: 4, y: 4, rx: 2 }),
+      React.createElement('rect', { key: 2, width: 6, height: 6, x: 9, y: 9, rx: 1 }),
+      React.createElement('path', { key: 3, d: "M15 2v2" }),
+      React.createElement('path', { key: 4, d: "M15 20v2" }),
+      React.createElement('path', { key: 5, d: "M2 15h2" }),
+      React.createElement('path', { key: 6, d: "M2 9h2" }),
+      React.createElement('path', { key: 7, d: "M20 15h2" }),
+      React.createElement('path', { key: 8, d: "M20 9h2" }),
+      React.createElement('path', { key: 9, d: "M9 2v2" }),
+      React.createElement('path', { key: 10, d: "M9 20v2" })
+    ]);
+    
+    const Code2 = ({ className, size = 24 }) => React.createElement('svg', { 
+      className,
+      width: size, 
+      height: size, 
+      viewBox: "0 0 24 24", 
+      fill: "none", 
+      stroke: "currentColor", 
+      strokeWidth: 2, 
+      strokeLinecap: "round", 
+      strokeLinejoin: "round" 
+    }, [
+      React.createElement('path', { key: 1, d: "m18 16 4-4-4-4" }),
+      React.createElement('path', { key: 2, d: "m6 8-4 4 4 4" }),
+      React.createElement('path', { key: 3, d: "m14.5 4-5 16" })
+    ]);
+    
+    const Database = ({ className, size = 24 }) => React.createElement('svg', { 
+      className,
+      width: size, 
+      height: size, 
+      viewBox: "0 0 24 24", 
+      fill: "none", 
+      stroke: "currentColor", 
+      strokeWidth: 2, 
+      strokeLinecap: "round", 
+      strokeLinejoin: "round" 
+    }, [
+      React.createElement('ellipse', { key: 1, cx: 12, cy: 5, rx: 9, ry: 3 }),
+      React.createElement('path', { key: 2, d: "M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" }),
+      React.createElement('path', { key: 3, d: "M3 12c0 1.66 4 3 9 3s9-1.34 9-3" })
+    ]);
+    
+    const Trophy = ({ className, size = 24 }) => React.createElement('svg', { 
+      className,
+      width: size, 
+      height: size, 
+      viewBox: "0 0 24 24", 
+      fill: "none", 
+      stroke: "currentColor", 
+      strokeWidth: 2, 
+      strokeLinecap: "round", 
+      strokeLinejoin: "round" 
+    }, [
+      React.createElement('path', { key: 1, d: "M6 9H4.5a2.5 2.5 0 0 1 0-5H6" }),
+      React.createElement('path', { key: 2, d: "M18 9h1.5a2.5 2.5 0 0 0 0-5H18" }),
+      React.createElement('path', { key: 3, d: "M4 22h16" }),
+      React.createElement('path', { key: 4, d: "M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" }),
+      React.createElement('path', { key: 5, d: "M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" }),
+      React.createElement('path', { key: 6, d: "M18 2H6v7a6 6 0 0 0 12 0V2Z" })
+    ]);
+    
+    const Lightbulb = ({ className, size = 24 }) => React.createElement('svg', { 
+      className,
+      width: size, 
+      height: size, 
+      viewBox: "0 0 24 24", 
+      fill: "none", 
+      stroke: "currentColor", 
+      strokeWidth: 2, 
+      strokeLinecap: "round", 
+      strokeLinejoin: "round" 
+    }, [
+      React.createElement('path', { key: 1, d: "M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" }),
+      React.createElement('path', { key: 2, d: "M9 18h6" }),
+      React.createElement('path', { key: 3, d: "M10 22h4" })
+    ]);
+    
+    const Settings = ({ className, size = 24 }) => React.createElement('svg', { 
+      className,
+      width: size, 
+      height: size, 
+      viewBox: "0 0 24 24", 
+      fill: "none", 
+      stroke: "currentColor", 
+      strokeWidth: 2, 
+      strokeLinecap: "round", 
+      strokeLinejoin: "round" 
+    }, [
+      React.createElement('path', { key: 1, d: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" }),
+      React.createElement('circle', { key: 2, cx: 12, cy: 12, r: 3 })
+    ]);
+    
+    const Key = ({ className, size = 24 }) => React.createElement('svg', { 
+      className,
+      width: size, 
+      height: size, 
+      viewBox: "0 0 24 24", 
+      fill: "none", 
+      stroke: "currentColor", 
+      strokeWidth: 2, 
+      strokeLinecap: "round", 
+      strokeLinejoin: "round" 
+    }, [
+      React.createElement('circle', { key: 1, cx: 7.5, cy: 15.5, r: 5.5 }),
+      React.createElement('path', { key: 2, d: "m21 2-9.6 9.6" }),
+      React.createElement('path', { key: 3, d: "m15.5 7.5 3 3L22 7l-3-3" })
+    ]);
+    
+    const Monitor = ({ className, size = 24 }) => React.createElement('svg', { 
+      className,
+      width: size, 
+      height: size, 
+      viewBox: "0 0 24 24", 
+      fill: "none", 
+      stroke: "currentColor", 
+      strokeWidth: 2, 
+      strokeLinecap: "round", 
+      strokeLinejoin: "round" 
+    }, [
+      React.createElement('rect', { key: 1, width: 20, height: 14, x: 2, y: 3, rx: 2 }),
+      React.createElement('line', { key: 2, x1: 8, x2: 16, y1: 21, y2: 21 }),
+      React.createElement('line', { key: 3, x1: 12, x2: 12, y1: 17, y2: 21 })
+    ]);
+    
+    const Car = ({ className, size = 24 }) => React.createElement('svg', { 
+      className,
+      width: size, 
+      height: size, 
+      viewBox: "0 0 24 24", 
+      fill: "none", 
+      stroke: "currentColor", 
+      strokeWidth: 2, 
+      strokeLinecap: "round", 
+      strokeLinejoin: "round" 
+    }, [
+      React.createElement('path', { key: 1, d: "M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" }),
+      React.createElement('circle', { key: 2, cx: 7, cy: 17, r: 2 }),
+      React.createElement('path', { key: 3, d: "M9 17h6" }),
+      React.createElement('circle', { key: 4, cx: 17, cy: 17, r: 2 })
+    ]);
+    
+    const Github = ({ className, size = 24 }) => React.createElement('svg', { 
+      className,
+      width: size, 
+      height: size, 
+      viewBox: "0 0 24 24", 
+      fill: "none", 
+      stroke: "currentColor", 
+      strokeWidth: 2, 
+      strokeLinecap: "round", 
+      strokeLinejoin: "round" 
+    }, [
+      React.createElement('path', { key: 1, d: "M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" }),
+      React.createElement('path', { key: 2, d: "M9 18c-4.51 2-5-2-7-2" })
+    ]);
+
+    const slides = [
+      {
+        id: 1,
+        type: 'title',
+        title: 'Wer ist es? – Die KI-Team-Challenge',
+        subtitle: 'Vibecoding & Personality Matching in Google Colab',
+        context: 'BMW EG-940 Team Workshop',
+        icon: <Car className="w-16 h-16 text-blue-500" />
+      },
+      {
+        id: 2,
+        type: 'content',
+        title: 'Was ist eigentlich "Vibecoding"?',
+        icon: <Cpu className="w-8 h-8 text-blue-400" />,
+        items: [
+          { label: 'Traditionelles Coding', text: 'Syntax lernen, Semikolons suchen, Fehlermeldungen debuggen.' },
+          { label: 'Vibecoding', text: 'Wir beschreiben der KI in natürlicher Sprache, was wir erreichen wollen.' },
+          { label: 'KI als Werkzeug', text: 'Die KI schreibt den Python-Code – wir steuern die Logik und die Vision.' }
+        ]
+      },
+      {
+        id: 3,
+        type: 'process',
+        title: 'Der Ablauf (The Mission)',
+        steps: [
+          { num: '01', title: 'Data', desc: 'Team-Wissen sammeln' },
+          { num: '02', title: 'Code', desc: 'App in Colab bauen' },
+          { num: '03', title: 'Test', desc: 'Live-Challenge & Scoring' }
+        ]
+      },
+      {
+        id: 4,
+        type: 'content',
+        title: 'Phase 1: Unsere Datenbasis',
+        icon: <Database className="w-8 h-8 text-blue-400" />,
+        items: [
+          { label: 'Eure Aufgabe', text: 'Schreibt 3-5 Sätze über euch (Hobbys, Ticks, BMW-Modell) in eine .txt Datei.' },
+          { label: 'Anonymität', text: 'Nennt euren Namen NICHT im Text.' },
+          { label: 'Prozess', text: 'Schickt die Datei an den Moderator. Diese Texte werden am Ende für den Wettbewerb verwendet.' }
+        ]
+      },
+      {
+        id: 5,
+        type: 'content',
+        title: 'Phase 2: Die App programmieren',
+        icon: <Monitor className="w-8 h-8 text-blue-400" />,
+        items: [
+          { label: 'Werkzeug', text: 'Google Colab (Python direkt im Browser nutzen) https://colab.google.com/.' },
+          { label: 'Datenstruktur', text: 'Wir definieren eine Liste mit Namen und Beschreibungen im Code.' },
+          { label: 'Input', text: 'Ein einfaches Eingabefeld [input()] nimmt später die Rätsel-Texte auf.' }
+        ]
+      },
+      {
+        id: 6,
+        type: 'code-tips',
+        title: 'Prompting-Tipps für die Teams',
+        icon: <Code2 className="w-8 h-8 text-blue-400" />,
+        prompts: [
+          '"Startet mit einer konkreten Beschreibung der Aufgabe in Summe."',
+          '"Euer \'fachliches\' Know How liegt in der Erstellung möglichst passender Beschreibung eurer Kollegen."',
+          '"Nutze die Gemini API, um den Input mit den Beschreibungen zu vergleichen."'
+        ]
+      },
+      {
+        id: 7,
+        type: 'scoring',
+        title: 'Die Live-Challenge (Scoring)',
+        icon: <Trophy className="w-8 h-8 text-yellow-500" />,
+        details: [
+          'Der Moderator präsentiert nacheinander die Texte der Mitspieler.',
+          'Teams kopieren den Text per Copy & Paste in ihr Programm.',
+          'Vergleich mit der Auflösung des Moderators.'
+        ],
+        points: '1 Punkt pro korrekt identifiziertem Mitarbeiter. 0 Punkte falls es sich um ein eigenes Teammitgleid handelt.'
+      },
+      {
+        id: 8,
+        type: 'content',
+        title: 'Transfer: KI bei BMW',
+        icon: <Lightbulb className="w-8 h-8 text-blue-400" />,
+        items: [
+          { label: 'Schnelle Prototypen', text: 'Datenanalysen ohne tiefes Coding-Wissen.' },
+          { label: 'Automatisierung', text: 'Excel-Aufgaben oder Reporting via KI-Skripten.' },
+          { label: 'Fazit', text: 'KI ist ein mächtiges Werkzeug in eurer Hand – nutzt es für Innovation.' }
+        ]
+      },
+      {
+        id: 9,
+        type: 'backup',
+        title: 'Backup: Anatomie der Lösung',
+        icon: <Settings className="w-8 h-8 text-slate-400" />,
+        content: [
+          { label: 'Datenstruktur', text: 'Liste von Dictionaries (employees_data) für saubere Trennung.' },
+          { label: 'System Prompt', text: '"Du bist ein KI-Assistent, dessen Aufgabe es ist, einen Mitarbeiter aus einer vorgegebenen Liste zu identifizieren. Der Benutzer wird dir Hobbys und Eigenschaften nennen, und du musst den Namen des Mitarbeiters zurückgeben, der am besten zu diesen Beschreibungen passt. Antworte ausschließlich mit dem Namen des Mitarbeiters und nichts anderem.\n\nHier ist die Liste der Mitarbeiter mit ihren Beschreibungen:\n"' },
+          { label: 'Workflow', text: 'System-Prompt + Liste = Kontext. Benutzer-Input = Anfrage.' }
+        ]
+      },
+      {
+        id: 10,
+        type: 'backup',
+        title: 'Backup: Module & Installation',
+        icon: <Settings className="w-8 h-8 text-slate-400" />,
+        content: [
+          { label: 'Library', text: 'google-generai für die Gemini-Anbindung.' },
+          { label: 'Installation', text: '!pip install -U google-genai' },
+          { label: 'Helper', text: 'os für API-Keys, exceptions für Error-Handling.' }
+        ]
+      },
+      {
+        id: 11,
+        type: 'backup',
+        title: 'Setup: Google API Key',
+        icon: <Key className="w-8 h-8 text-slate-400" />,
+        steps: [
+          'Portal: aistudio.google.com besuchen.',
+          'Key erstellen: "Get API key" klicken.',
+          'Colab Secrets: Über das Schlüssel-Icon links "GOOGLE_API_KEY" hinterlegen.'
+        ]
+      },
+      {
+        id: 12,
+        type: 'content',
+        title: 'Ressourcen & Downloads',
+        icon: <Github className="w-8 h-8 text-white" />,
+        items: [
+          { label: 'GitHub Repository', text: 'https://github.com/Escrimark/KI-Team-Challenge/' },
+          { label: 'Musterlösung', text: 'Namen raten.ipynb – Die Referenz-Implementierung als Jupyter Notebook.' },
+          { label: 'Evaluation Tool', text: 'Vibe Coding Challenge Evaluation.xlsx – Zur Auswertung der Challenge.' }
+        ]
+      }
+    ];
+
+    function App() {
+      const [currentSlide, setCurrentSlide] = useState(0);
+
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          if (e.key === 'ArrowRight') nextSlide();
+          if (e.key === 'ArrowLeft') prevSlide();
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+      }, [currentSlide]);
+
+      const nextSlide = () => {
+        if (currentSlide < slides.length - 1) setCurrentSlide(currentSlide + 1);
+      };
+
+      const prevSlide = () => {
+        if (currentSlide > 0) setCurrentSlide(currentSlide - 1);
+      };
+
+      const slide = slides[currentSlide];
+
+      return (
+        <div className="min-h-screen bg-[#0a0e17] text-slate-100 font-sans selection:bg-blue-500/30">
+          {/* Background Decor */}
+          <div className="fixed inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full" />
+            <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-slate-800/20 blur-[120px] rounded-full" />
+          </div>
+
+          {/* Progress Bar */}
+          <div className="fixed top-0 left-0 w-full h-1 bg-slate-800 z-50">
+            <div 
+              className="h-full bg-blue-500 transition-all duration-300" 
+              style={{ width: `${((currentSlide + 1) / slides.length) * 100}%` }}
+            />
+          </div>
+
+          {/* Slide Container */}
+          <main className="relative flex flex-col items-center justify-center min-h-screen p-8 md:p-16">
+            <div className="w-full max-w-5xl transition-all duration-500 transform translate-y-0 opacity-100">
+              
+              {slide.type === 'title' && (
+                <div className="text-center space-y-8 py-12">
+                  <div className="flex justify-center mb-6">{slide.icon}</div>
+                  <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white leading-tight">
+                    {slide.title}
+                  </h1>
+                  <p className="text-xl md:text-2xl text-slate-400 font-light max-w-2xl mx-auto">
+                    {slide.subtitle}
+                  </p>
+                  <div className="pt-12 inline-flex items-center space-x-4">
+                    <span className="h-px w-12 bg-blue-500" />
+                    <span className="text-sm tracking-[0.3em] uppercase text-blue-500 font-semibold">{slide.context}</span>
+                    <span className="h-px w-12 bg-blue-500" />
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'content' && (
+                <div className="space-y-12">
+                  <div className="flex items-center space-x-4 border-b border-slate-800 pb-6">
+                    {slide.icon}
+                    <h2 className="text-4xl font-semibold text-white">{slide.title}</h2>
+                  </div>
+                  <div className="grid grid-cols-1 gap-8">
+                    {slide.items.map((item, i) => (
+                      <div key={i} className="group bg-slate-900/40 border border-slate-800 p-6 rounded-2xl hover:border-blue-500/50 transition-colors backdrop-blur-sm">
+                        <h3 className="text-blue-400 font-bold mb-2 uppercase tracking-wider text-sm">{item.label}</h3>
+                        {item.text.startsWith('http') ? (
+                          <a 
+                            href={item.text} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="text-lg text-blue-400 hover:text-blue-300 underline leading-relaxed break-all"
+                          >
+                            {item.text}
+                          </a>
+                        ) : (
+                          <p className="text-lg text-slate-300 leading-relaxed">{item.text}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'process' && (
+                <div className="space-y-16 text-center">
+                  <h2 className="text-4xl font-semibold text-white">{slide.title}</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                    {slide.steps.map((step, i) => (
+                      <div key={i} className="relative group">
+                        <div className="text-8xl font-black text-slate-800/50 absolute -top-12 left-1/2 -translate-x-1/2 group-hover:text-blue-600/20 transition-colors">
+                          {step.num}
+                        </div>
+                        <div className="relative pt-4">
+                          <h3 className="text-2xl font-bold text-white mb-2">{step.title}</h3>
+                          <p className="text-slate-400">{step.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'code-tips' && (
+                <div className="space-y-10">
+                  <div className="flex items-center space-x-4 border-b border-slate-800 pb-6">
+                    {slide.icon}
+                    <h2 className="text-4xl font-semibold text-white">{slide.title}</h2>
+                  </div>
+                  <div className="space-y-6">
+                    {slide.prompts.map((p, i) => (
+                      <div key={i} className="bg-black/50 border-l-4 border-blue-600 p-6 rounded-r-xl font-mono text-blue-200">
+                        <span className="text-slate-500 mr-2 opacity-50">&gt;</span> {p}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'scoring' && (
+                <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-10 backdrop-blur-md">
+                  <div className="flex items-center space-x-4 mb-8">
+                    {slide.icon}
+                    <h2 className="text-4xl font-bold text-white">{slide.title}</h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div className="space-y-6">
+                      {slide.details.map((d, i) => (
+                        <div key={i} className="flex items-start space-x-3">
+                          <div className="mt-1.5 w-2 h-2 rounded-full bg-blue-500 flex-shrink-0" />
+                          <p className="text-slate-300 text-lg">{d}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="bg-yellow-500/10 border border-yellow-500/20 p-8 rounded-2xl flex flex-col justify-center items-center text-center">
+                      <div className="text-yellow-500 mb-4"><Trophy size={48} /></div>
+                      <h3 className="text-yellow-500 font-bold text-xl uppercase tracking-widest mb-2">Punktesystem</h3>
+                      <p className="text-white text-2xl font-semibold">{slide.points}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'backup' && (
+                <div className="space-y-8">
+                  <div className="flex items-center space-x-4 border-b border-slate-700 pb-6">
+                    <div className="bg-slate-800 p-3 rounded-lg">{slide.icon}</div>
+                    <div>
+                      <h2 className="text-3xl font-semibold text-white">{slide.title}</h2>
+                      <p className="text-slate-500 text-sm uppercase tracking-widest">Technisches Backup</p>
+                    </div>
+                  </div>
+                  
+                  {slide.content && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {slide.content.map((item, i) => (
+                        <div key={i} className="bg-slate-900/80 p-6 rounded-xl border border-slate-800">
+                          <h4 className="text-blue-500 text-xs font-bold uppercase mb-2">{item.label}</h4>
+                          <p className="text-slate-300">{item.text}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {slide.steps && (
+                    <div className="bg-black/30 p-8 rounded-2xl space-y-6 border border-slate-800">
+                      {slide.steps.map((step, i) => (
+                        <div key={i} className="flex items-center space-x-4">
+                          <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-sm font-bold text-slate-400">
+                            {i + 1}
+                          </div>
+                          <p className="text-slate-300">{step}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </main>
+
+          {/* Navigation Controls */}
+          <nav className="fixed bottom-10 left-1/2 -translate-x-1/2 flex items-center space-x-6 z-50">
+            <button 
+              onClick={prevSlide}
+              disabled={currentSlide === 0}
+              className="p-4 rounded-full bg-slate-900/80 border border-slate-800 hover:border-blue-500 disabled:opacity-30 disabled:hover:border-slate-800 transition-all text-white"
+            >
+              <ChevronLeft />
+            </button>
+
+            <div className="bg-slate-900/80 border border-slate-800 px-6 py-2 rounded-full text-sm font-medium text-slate-400 backdrop-blur-md">
+              <span className="text-white">{currentSlide + 1}</span> / {slides.length}
+            </div>
+
+            <button 
+              onClick={nextSlide}
+              disabled={currentSlide === slides.length - 1}
+              className="p-4 rounded-full bg-slate-900/80 border border-slate-800 hover:border-blue-500 disabled:opacity-30 disabled:hover:border-slate-800 transition-all text-white"
+            >
+              <ChevronRight />
+            </button>
+          </nav>
+
+          {/* Slide Counter (Alternative View) */}
+          <div className="fixed bottom-10 right-10 hidden md:block">
+            <div className="text-[10px] tracking-[0.5em] uppercase text-slate-600 font-bold rotate-90 origin-right">
+              BMW AI WORKSHOP 2026
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Render App
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
